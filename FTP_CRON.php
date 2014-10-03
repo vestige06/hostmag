@@ -6,18 +6,12 @@
 define('FULL_SIZE',102400);
 
 #a path array
-$ori_list = array(
-	array(
-		'ftp_user' => 'htlg',
-	),
-);
+$ori_list = array('htlg','uuu');
 
 #an avoid path array
-$void_list = array(
-	'ftp_user' => 'uuu',
-);
+$void_list = array('uuu');
 #real path array
-//$real_list=array_diff($ori_list,$void_list);
+$real_list=array_diff($ori_list,$void_list);
 //print_r($real_list);
 
 /*
@@ -73,24 +67,41 @@ function SET_MOD($path='',$param=''){
 
 /*
 	@FTP_DO
-*/
+	return 1 succ
+	return -1 syntax error
+	return -2 loss param
+ */
 function FTP_DO($path='',$size='',$param=''){
 	if($path!='' && $size!='' && $param!=''){
-		if(PATH_CHK($path,$size)==1){
-			if(SET_MOD($path,$param)==1){
+		#TOKE ONE
+		$res_one = PATH_CHK($path,$size);
+		if($res_one==1){
+			#TOKE TWO
+			$res_two  = SET_MOD($path,$param);
+			if($res_two==1){
+				#Succ Chg
 				return 1;
 			}
-			else{
+			else if($res_two==-1){
+				#Sytax Error
+				return -1;
 			}
 		}
-		else{
+		else if($res_one==-1){
+# Dir Not Exist
 		}
-
+		else if($res_one==0){
+# File Not Over
+		}
 	}
 	else{
+#PARAM WRONG
+		return -2;
 	}
-
 }
+
+
+
 #$aa='';
 #echo system('ls',$bb);
 #echo $bb;
